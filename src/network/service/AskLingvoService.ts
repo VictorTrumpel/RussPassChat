@@ -4,7 +4,6 @@ import { Restaurant } from '../models/Restaurant';
 import { Excursion } from '../models/Excursion';
 
 const SERVER_URL = import.meta.env.VITE_APP_SERVER_URL || 'http://localhost:3000/';
-
 export class AskLingvoService {
   private baseURL = new URL(SERVER_URL);
 

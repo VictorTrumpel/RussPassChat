@@ -1,6 +1,6 @@
 import { ConcernTagSelector as ConcernTagSelectorFeature } from './ConcernTagSelector/ConcernTagSelector';
 import { ConcernFormViewModel } from './ConcernFormViewModel/ConcernFormViewModel';
-import { TourList as TourListFeature } from './TourList/TourList';
+import { ResultCardSelector as TourListFeature } from './ResultCardSelector/ResultCardSelector';
 import { DateSelector as DateSelectorFeature } from './DateSelector/DateSelector';
 import { CommunitySelector as CommunitySelectorFeature } from './CommunitySelector/CommunitySelector';
 

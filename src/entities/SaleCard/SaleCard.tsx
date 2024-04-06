@@ -10,9 +10,20 @@ type SaleCardProps = {
   price: string;
   popularity: number;
   cardUrl: string;
+  id: string;
+
+  onLikeClick?: (id: string) => void;
 };
 
-export const SaleCard = ({ imgUrl, title, address, price, cardUrl }: SaleCardProps) => {
+export const SaleCard = ({
+  imgUrl,
+  title,
+  address,
+  price,
+  cardUrl,
+  onLikeClick,
+  id,
+}: SaleCardProps) => {
   return (
     <div className='sale-card'>
       <div className='card-avatar'>
@@ -29,11 +40,12 @@ export const SaleCard = ({ imgUrl, title, address, price, cardUrl }: SaleCardPro
           {address.slice(0, 30)}
           {address.length > 30 && '...'}
         </h5>
+
         <div className='card-action-panel'>
           <Button type='text' className='sale-btn'>
             от {price}
           </Button>
-          <Button type='link' className='heart-btn'>
+          <Button type='link' className='heart-btn' onClick={() => onLikeClick?.(id)}>
             <HeartIcon />
           </Button>
         </div>

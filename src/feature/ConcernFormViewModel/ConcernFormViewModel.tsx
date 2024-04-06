@@ -5,6 +5,8 @@ import { concernSliceActions } from '../../model/concernSlice';
 import { ConcernStateType } from '../../model/concernSlice';
 import { CalendarProps } from 'antd';
 import { AskLingvoController } from '../../network/controllers/AskLingvoController';
+import { LikeActivityController } from '../../network/controllers/LikeActivityController';
+import { ACTION_TYPE } from '../../network/service/LikeActivityService';
 
 type ConcernViewModelType = {
   currentStep: ConcernStateType['currentStep'];
@@ -25,6 +27,9 @@ type ConcernViewModelType = {
   handleUnselectCommunityTag(text: string): void;
   fetchTheSelection(): ReturnType<AskLingvoController['askModel']>;
   handleChangeCommunityPromt(text: string): void;
+
+  handleLikeActivity(activityId: string, actionType: ACTION_TYPE): Promise<void>;
+  handleUnlikeActivity(): Promise<void>;
 };
 
 export const ConcernViewModelContext = createContext<ConcernViewModelType | null>(null);
@@ -42,6 +47,7 @@ const {
 } = concernSliceActions;
 
 const askLingvoController = new AskLingvoController();
+const likeActivityController = new LikeActivityController();
 
 export const ConcernFormViewModel = ({ children }: { children: ReactNode }) => {
   const currentStep = useTSelector((state) => state.concern.currentStep);
@@ -102,6 +108,12 @@ export const ConcernFormViewModel = ({ children }: { children: ReactNode }) => {
     return await askLingvoController.askModel(promt);
   };
 
+  const handleLikeActivity = async (activityId: string, actionType: ACTION_TYPE) => {
+    likeActivityController.like(activityId, actionType);
+  };
+
+  const handleUnlikeActivity = async () => {};
+
   return (
     <ConcernViewModelContext.Provider
       value={{
@@ -123,6 +135,9 @@ export const ConcernFormViewModel = ({ children }: { children: ReactNode }) => {
         handleUnselectCommunityTag,
         fetchTheSelection,
         handleChangeCommunityPromt,
+
+        handleLikeActivity,
+        handleUnlikeActivity,
       }}
     >
       {children}

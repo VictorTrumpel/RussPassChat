@@ -6,16 +6,17 @@ import { Event } from '../../network/models/Event';
 import { Restaurant } from '../../network/models/Restaurant';
 import { Excursion } from '../../network/models/Excursion';
 import { useConcernFormViewModel } from '../ConcernFormViewModel/ConcernFormViewModel';
-import './TourList.scss';
+import { ACTION_TYPE } from '../../network/service/LikeActivityService';
+import './ResultCardSelector.scss';
 
-export const TourList = () => {
+export const ResultCardSelector = () => {
   const [isFetching, setIsFetch] = useState(false);
 
   const [eventList, setEventList] = useState<Event[]>([]);
   const [restaurantList, setRestaurantList] = useState<Restaurant[]>([]);
   const [excursionList, setExcursionList] = useState<Excursion[]>([]);
 
-  const { handleSelectStep, fetchTheSelection } = useConcernFormViewModel();
+  const { handleSelectStep, fetchTheSelection, handleLikeActivity } = useConcernFormViewModel();
 
   const hasEvents = eventList.length > 0;
   const hasRestaurants = restaurantList.length > 0;
@@ -37,8 +38,11 @@ export const TourList = () => {
     }
   };
 
+  const handleLikeBtnClick = (activityId: string, type: ACTION_TYPE) => {
+    handleLikeActivity(activityId, type);
+  };
+
   useEffect(() => {
-    console.log('isFetching :>> ', isFetching);
     handleFetchResult();
   }, []);
 
@@ -54,12 +58,14 @@ export const TourList = () => {
             .map(({ objectId, title, imageUrl, address, price, popularity, cardUrl }) => (
               <SaleCard
                 key={objectId}
+                id={objectId}
                 imgUrl={imageUrl}
                 title={title}
                 address={address}
                 price={`${price}`}
                 popularity={popularity}
                 cardUrl={cardUrl}
+                onLikeClick={(id) => handleLikeBtnClick(id, 'EVENT')}
               />
             ))}
         </div>
@@ -71,6 +77,7 @@ export const TourList = () => {
             .map(({ objectId, title, imageUrl, address, price, popularity, cardUrl }) => (
               <SaleCard
                 key={objectId}
+                id={objectId}
                 imgUrl={imageUrl}
                 title={title}
                 address={address}
@@ -88,6 +95,7 @@ export const TourList = () => {
             .map(({ objectId, title, imageUrl, price, popularity, destination, cardUrl }) => (
               <SaleCard
                 key={objectId}
+                id={objectId}
                 imgUrl={imageUrl}
                 title={title}
                 address={destination}
