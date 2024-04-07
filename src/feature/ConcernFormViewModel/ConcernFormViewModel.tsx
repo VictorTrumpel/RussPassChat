@@ -103,7 +103,7 @@ export const ConcernFormViewModel = ({ children }: { children: ReactNode }) => {
     return await askLingvoController.askModel(prompt);
   };
 
-  const handleLikeActivity = async (activityId: string, actionType: ACTION_TYPE) => {
+  const handleLikeActivity = async () => {
     // likeActivityController.like(activityId, actionType);
   };
 
