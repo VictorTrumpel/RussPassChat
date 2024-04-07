@@ -9,12 +9,14 @@ type CardListSelectionProps = {
   eventList: Event[];
   restaurantList: Restaurant[];
   excursionList: Excursion[];
+  onLikeClick: (id: string) => void;
 };
 
 export const CardListSelection = ({
   eventList,
   restaurantList,
   excursionList,
+  onLikeClick,
 }: CardListSelectionProps) => {
   const { handleLikeActivity } = useConcernFormViewModel();
 
@@ -23,7 +25,7 @@ export const CardListSelection = ({
   const hasExcursions = excursionList.length > 0;
 
   const handleLikeBtnClick = (activityId: string, type: ACTION_TYPE) => {
-    console.log('activityId :>> ', activityId);
+    onLikeClick(activityId);
     handleLikeActivity(activityId, type);
   };
 
@@ -62,6 +64,7 @@ export const CardListSelection = ({
               price={`${price}`}
               popularity={popularity}
               cardUrl={cardUrl}
+              onLikeClick={(id) => handleLikeBtnClick(id, 'EVENT')}
             />
           ))}
       </div>
@@ -80,6 +83,7 @@ export const CardListSelection = ({
               price={`${price}`}
               popularity={popularity}
               cardUrl={cardUrl}
+              onLikeClick={(id) => handleLikeBtnClick(id, 'EVENT')}
             />
           ))}
       </div>

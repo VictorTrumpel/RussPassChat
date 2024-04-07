@@ -6,6 +6,4 @@ export class LikeActivityController {
   async like(activityId: string, type: ACTION_TYPE) {
     this.likeActivityService.likeActivity(activityId, type);
   }
-
-  unlikeCard() {}
 }

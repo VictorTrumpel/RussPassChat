@@ -4,9 +4,13 @@ import { useTSelector } from '../../shared/hooks/useTSelector';
 import { concernSliceActions } from '../../model/concernSlice';
 import { ConcernStateType } from '../../model/concernSlice';
 import { CalendarProps } from 'antd';
+import { Event } from '../../network/models/Event';
+import { Restaurant } from '../../network/models/Restaurant';
+import { Excursion } from '../../network/models/Excursion';
 import { AskLingvoController } from '../../network/controllers/AskLingvoController';
 import { LikeActivityController } from '../../network/controllers/LikeActivityController';
 import { ACTION_TYPE } from '../../network/service/LikeActivityService';
+import { CardsController } from '../../network/controllers/CardsController';
 
 type ConcernViewModelType = {
   currentStep: ConcernStateType['currentStep'];
@@ -30,6 +34,8 @@ type ConcernViewModelType = {
 
   handleLikeActivity(activityId: string, actionType: ACTION_TYPE): Promise<void>;
   handleUnlikeActivity(): Promise<void>;
+
+  fetchAllCards(ids: string[]): Promise<(Event | Restaurant | Excursion)[]>;
 };
 
 export const ConcernViewModelContext = createContext<ConcernViewModelType | null>(null);
@@ -47,7 +53,7 @@ const {
 } = concernSliceActions;
 
 const askLingvoController = new AskLingvoController();
-const likeActivityController = new LikeActivityController();
+const cardsController = new CardsController();
 
 export const ConcernFormViewModel = ({ children }: { children: ReactNode }) => {
   const currentStep = useTSelector((state) => state.concern.currentStep);
@@ -107,6 +113,10 @@ export const ConcernFormViewModel = ({ children }: { children: ReactNode }) => {
     // likeActivityController.like(activityId, actionType);
   };
 
+  const fetchAllCards = async (ids: string[]) => {
+    return cardsController.getCardIds(ids);
+  };
+
   const handleUnlikeActivity = async () => {};
 
   return (
@@ -133,6 +143,8 @@ export const ConcernFormViewModel = ({ children }: { children: ReactNode }) => {
 
         handleLikeActivity,
         handleUnlikeActivity,
+
+        fetchAllCards,
       }}
     >
       {children}

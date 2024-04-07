@@ -3,6 +3,7 @@ import { ConcernFormViewModel } from './ConcernFormViewModel/ConcernFormViewMode
 import { ResultCardSelector as TourListFeature } from './ResultCardSelector/ResultCardSelector';
 import { DateSelector as DateSelectorFeature } from './DateSelector/DateSelector';
 import { CommunitySelector as CommunitySelectorFeature } from './CommunitySelector/CommunitySelector';
+import { CustomSelection as CustomSelectionFeature } from './CustomSelection/CustomSelection';
 
 export const ConcernTagSelector = () => {
   return (
@@ -32,6 +33,14 @@ export const CommunitySelector = () => {
   return (
     <ConcernFormViewModel>
       <CommunitySelectorFeature />
+    </ConcernFormViewModel>
+  );
+};
+
+export const CustomSelection = () => {
+  return (
+    <ConcernFormViewModel>
+      <CustomSelectionFeature />
     </ConcernFormViewModel>
   );
 };

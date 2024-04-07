@@ -22,7 +22,7 @@ export const SaleCard = ({
   address,
   price,
   cardUrl,
-  // onLikeClick,
+  onLikeClick,
   id,
 }: SaleCardProps) => {
   const [isLiked, setIsLiked] = useState(false);
@@ -35,6 +35,7 @@ export const SaleCard = ({
       price,
       cardUrl,
     });
+    onLikeClick(id);
     setIsLiked(!isLiked);
   };
 

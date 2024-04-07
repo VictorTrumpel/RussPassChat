@@ -25,6 +25,8 @@ export const ResultCardSelector = () => {
   const [chatHistory, setChatHistory] = useState<ChatHistoryItemType[]>([]);
   const [extraPrompt, setExtraPrompt] = useState('');
 
+  const [likedIdsSet, setLikedIdsSet] = useState(new Set<string>());
+
   const additionalSelectionRef = useRef<Exclude<ChatHistoryItemType, string>>({
     eventList: [],
     restaurantList: [],
@@ -34,9 +36,7 @@ export const ResultCardSelector = () => {
   const scrollWindowRef = useRef<HTMLDivElement>(null);
 
   const {
-    handleSelectStep,
     fetchTheSelection,
-    handleLikeActivity,
     date,
     datePromt,
     interestPromt,
@@ -79,8 +79,6 @@ export const ResultCardSelector = () => {
       };
 
       additionalSelectionRef.current = newAdditionalItem;
-
-      console.log('additionalSelectionRef.current :>> ', additionalSelectionRef.current);
 
       setChatHistory([...newHistory, newHistoryItem]);
     } finally {
@@ -144,6 +142,57 @@ export const ResultCardSelector = () => {
     });
   };
 
+  const handleClickPlainPoint = () => {
+    window.open('https://russpass.ru/plan/6612728cca056a6ae2bf900a', '_blank');
+  };
+
+  const handleShareBtnClick = () => {
+    try {
+      const origin = window.location.origin;
+
+      const allCardIds: string[] = [];
+
+      let lastHistoryItem: ChatHistoryItemType;
+
+      for (const historyItem of chatHistory) {
+        if (historyItem instanceof Object) {
+          lastHistoryItem = historyItem;
+        }
+      }
+
+      if (!lastHistoryItem) return;
+
+      const allEventsIds = (lastHistoryItem as Exclude<ChatHistoryItemType, string>).eventList.map(
+        (e) => e.objectId
+      );
+      const allExcursionIds = (
+        lastHistoryItem as Exclude<ChatHistoryItemType, string>
+      ).excursionList.map((e) => e.objectId);
+
+      const allRestIds = (
+        lastHistoryItem as Exclude<ChatHistoryItemType, string>
+      ).restaurantList.map((e) => e.objectId);
+
+      allCardIds.push(...allEventsIds);
+      allCardIds.push(...allExcursionIds);
+      allCardIds.push(...allRestIds);
+
+      window.open(`${origin}/selection?ids=${allCardIds.join(',')}`, '_blank');
+    } finally {
+    }
+  };
+
+  const handleAddLike = (id: string) => {
+    if (likedIdsSet.has(id)) {
+      likedIdsSet.delete(id);
+      setLikedIdsSet(new Set(likedIdsSet));
+      return;
+    }
+
+    likedIdsSet.add(id);
+    setLikedIdsSet(new Set(likedIdsSet));
+  };
+
   useEffect(() => {
     handleFetchResult();
   }, []);
@@ -160,7 +209,7 @@ export const ResultCardSelector = () => {
         {chatHistory.map((historyItem, idx) => {
           if (!historyItem) return <Fragment key={idx} />;
           if (historyItem instanceof Object)
-            return <CardListSelection key={idx} {...historyItem} />;
+            return <CardListSelection key={idx} {...historyItem} onLikeClick={handleAddLike} />;
           return (
             <Fragment key={idx}>
               <div className='divider' />
@@ -176,10 +225,18 @@ export const ResultCardSelector = () => {
         <Button onClick={handleClickFindTheSame} type='text'>
           Похожие варианты
         </Button>
-        <Button type='text'>
+        <Button onClick={handleShareBtnClick} type='text'>
           Поделиться <ShareIcon />
         </Button>
       </div>
+
+      {likedIdsSet.size >= 2 && (
+        <div className='sale-card card-plain-btn-container'>
+          <Button onClick={handleClickPlainPoint} type='text' className='sale-btn'>
+            Спланировать маршрут
+          </Button>
+        </div>
+      )}
 
       <NextSubmitInput
         inputProps={{

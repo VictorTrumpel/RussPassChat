@@ -6,4 +6,6 @@ export class AskLingvoController {
   async askModel(promt: string): ReturnType<AskLingvoService['ask']> {
     return this.lingvoService.ask(promt);
   }
+
+  
 }
