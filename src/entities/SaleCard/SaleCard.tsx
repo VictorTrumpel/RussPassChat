@@ -45,7 +45,7 @@ export const SaleCard = ({
             от {price}
           </Button>
           <Button type='link' className='heart-btn' onClick={() => onLikeClick?.(id)}>
-            <HeartIcon />
+            <span>В избранное</span> <HeartIcon />
           </Button>
         </div>
       </div>

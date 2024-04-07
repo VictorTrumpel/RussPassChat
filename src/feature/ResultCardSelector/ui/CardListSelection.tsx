@@ -23,6 +23,7 @@ export const CardListSelection = ({
   const hasExcursions = excursionList.length > 0;
 
   const handleLikeBtnClick = (activityId: string, type: ACTION_TYPE) => {
+    console.log('activityId :>> ', activityId);
     handleLikeActivity(activityId, type);
   };
 

@@ -37,6 +37,7 @@ export const ResultCardSelector = () => {
     handleSelectStep,
     fetchTheSelection,
     handleLikeActivity,
+    date,
     datePromt,
     interestPromt,
     checkedConcernTags,
@@ -52,7 +53,7 @@ export const ResultCardSelector = () => {
     const concernTagsString = checkedConcernTags.join(' ');
     const communityTagsString = communityTags.join(' ');
 
-    const basePrompt = `Интересы: ${concernTagsString.trim()} ${interestPromt.trim()} ${communityTagsString.trim()} ${communityPromt.trim()} Время: ${datePromt}`;
+    const basePrompt = `${concernTagsString.trim()} ${interestPromt.trim()} ${communityTagsString.trim()} ${communityPromt.trim()} Время: ${date} ${datePromt},`;
 
     return basePrompt.trim();
   };
@@ -61,7 +62,7 @@ export const ResultCardSelector = () => {
     try {
       setIsFetch(true);
 
-      const fullPrompt = `${createPromptFromHistory()} ${prompt}`.trim();
+      const fullPrompt = `${prompt} ${createPromptFromHistory()}`.trim();
 
       const newHistory = [...chatHistory, prompt];
 

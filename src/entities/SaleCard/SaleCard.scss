@@ -4,7 +4,7 @@
 
   &.skeleton-div {
     border-radius: 8px;
-    width: 320px;
+    width: 360px;
     height: 110px;
   }
 
@@ -31,7 +31,7 @@
   }
 
   .card-body {
-    width: 220px;
+    width: 260px;
     height: 110px;
     padding: 12px 12px;
     background-color: #f5f5f5;
@@ -79,5 +79,11 @@
     display: flex;
     align-items: center;
     margin-left: 15px;
+    font-weight: 500;
+    color: black;
+
+    span {
+      margin-right: 3px;
+    }
   }
 }
