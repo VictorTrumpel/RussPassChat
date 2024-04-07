@@ -27,8 +27,8 @@ export const SaleCard = ({
 }: SaleCardProps) => {
   const [isLiked, setIsLiked] = useState(false);
 
-  const handleClick = () => {
-    console.log('CardLike :>> ', {
+  const handleHeartClick = () => {
+    console.log('like card :>> ', {
       objectId: id,
       title,
       address,
@@ -36,6 +36,16 @@ export const SaleCard = ({
       cardUrl,
     });
     setIsLiked(!isLiked);
+  };
+
+  const handleBuyClick = () => {
+    console.log('buy cardк :>> ', {
+      objectId: id,
+      title,
+      address,
+      price,
+      cardUrl,
+    });
   };
 
   return (
@@ -56,10 +66,10 @@ export const SaleCard = ({
         </h5>
 
         <div className='card-action-panel'>
-          <Button type='text' className='sale-btn'>
+          <Button onClick={handleBuyClick} type='text' className='sale-btn'>
             от {price}
           </Button>
-          <Button type='text' className='heart-btn' onClick={handleClick}>
+          <Button type='text' className='heart-btn' onClick={handleHeartClick}>
             <span>В избранное</span> {isLiked ? <RedHeartIcon /> : <HeartIcon />}
           </Button>
         </div>
