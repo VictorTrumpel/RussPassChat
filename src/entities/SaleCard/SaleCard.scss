@@ -2,6 +2,12 @@
   display: flex;
   position: relative;
 
+  &.skeleton-div {
+    border-radius: 8px;
+    width: 320px;
+    height: 110px;
+  }
+
   .rate-mark {
     position: absolute;
     left: 8px;

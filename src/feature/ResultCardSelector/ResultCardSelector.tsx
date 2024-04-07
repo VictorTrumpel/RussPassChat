@@ -1,5 +1,6 @@
 import { SaleCard } from '../../entities/SaleCard/SaleCard';
-import { Button } from 'antd';
+import { SaleCardSkeleton } from '../../entities/SaleCard/SaleCardSkeleton';
+import { Button, Skeleton } from 'antd';
 import { useState, useEffect } from 'react';
 import { ShareIcon } from '../../shared/icons/ShareIcon';
 import { Event } from '../../network/models/Event';
@@ -45,6 +46,33 @@ export const ResultCardSelector = () => {
   useEffect(() => {
     handleFetchResult();
   }, []);
+
+  if (isFetching)
+    return (
+      <div className='tour-space concern-form-space'>
+        <h4>Подобрали самые интересные варианты!</h4>
+
+        <div className='all-card-list'>
+          <h4 className='list-title'>События</h4>
+          <div className='list'>
+            <SaleCardSkeleton />
+            <SaleCardSkeleton />
+            <SaleCardSkeleton />
+          </div>
+        </div>
+
+        <div className='action-button-panel'>
+          <Button type='text'>Другие варианты</Button>
+          <Button type='text'>
+            Поделиться <ShareIcon />
+          </Button>
+        </div>
+
+        <Button onClick={handleClickBtnBack} className='back-to-start-btn' type='text'>
+          Вернуться к началу
+        </Button>
+      </div>
+    );
 
   return (
     <div className='tour-space concern-form-space'>

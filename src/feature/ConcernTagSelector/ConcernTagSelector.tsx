@@ -1,4 +1,4 @@
-import { InputProps } from 'antd';
+import { InputProps, Skeleton } from 'antd';
 import { useConcernFormViewModel } from '../ConcernFormViewModel/ConcernFormViewModel';
 import { interests } from '../../shared/constants/interests';
 import { NextSubmitInput } from '../../shared/ui/NextSubmitInput/NextSubmitInput';
