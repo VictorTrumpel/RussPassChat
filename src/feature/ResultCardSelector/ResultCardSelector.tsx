@@ -45,10 +45,6 @@ export const ResultCardSelector = () => {
     communityPromt,
   } = useConcernFormViewModel();
 
-  const handleClickBtnBack = () => {
-    handleSelectStep('select-tag');
-  };
-
   const createPromptFromHistory = () => {
     const concernTagsString = checkedConcernTags.join(' ');
     const communityTagsString = communityTags.join(' ');
@@ -84,6 +80,8 @@ export const ResultCardSelector = () => {
 
       additionalSelectionRef.current = newAdditionalItem;
 
+      console.log('additionalSelectionRef.current :>> ', additionalSelectionRef.current);
+
       setChatHistory([...newHistory, newHistoryItem]);
     } finally {
       setIsFetch(false);
@@ -98,6 +96,29 @@ export const ResultCardSelector = () => {
     handleFetchResult(extraPrompt);
     setExtraPrompt('');
 
+    scrollWindowToBottom();
+  };
+
+  const handleClickFindTheSame = () => {
+    const similarEvents = additionalSelectionRef.current.eventList.splice(0, 3);
+    const similarRestaurants = additionalSelectionRef.current.restaurantList.splice(0, 3);
+    const similarExcursions = additionalSelectionRef.current.excursionList.splice(0, 3);
+
+    const newHistory: ChatHistoryItemType[] = [
+      'Похожие варианты',
+      {
+        eventList: similarEvents,
+        restaurantList: similarRestaurants,
+        excursionList: similarExcursions,
+      },
+    ];
+
+    setChatHistory([...chatHistory, ...newHistory]);
+
+    scrollWindowToBottom();
+  };
+
+  const scrollWindowToBottom = () => {
     setTimeout(() => {
       const scrollWindow = scrollWindowRef.current;
 
@@ -139,7 +160,9 @@ export const ResultCardSelector = () => {
       </div>
 
       <div className='action-button-panel'>
-        <Button type='text'>Похожие варианты</Button>
+        <Button onClick={handleClickFindTheSame} type='text'>
+          Похожие варианты
+        </Button>
         <Button type='text'>
           Поделиться <ShareIcon />
         </Button>
