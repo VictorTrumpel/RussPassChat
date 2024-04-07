@@ -37,6 +37,7 @@ export const ResultCardSelector = () => {
     handleSelectStep,
     fetchTheSelection,
     handleLikeActivity,
+    datePromt,
     interestPromt,
     checkedConcernTags,
     communityTags,
@@ -51,7 +52,7 @@ export const ResultCardSelector = () => {
     const concernTagsString = checkedConcernTags.join(' ');
     const communityTagsString = communityTags.join(' ');
 
-    const basePrompt = `Интересы: ${concernTagsString.trim()} ${interestPromt.trim()} ${communityTagsString.trim()} ${communityPromt.trim()}`;
+    const basePrompt = `Интересы: ${concernTagsString.trim()} ${interestPromt.trim()} ${communityTagsString.trim()} ${communityPromt.trim()} Время: ${datePromt}`;
 
     return basePrompt.trim();
   };
