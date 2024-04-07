@@ -104,6 +104,19 @@ export const ResultCardSelector = () => {
     const similarRestaurants = additionalSelectionRef.current.restaurantList.splice(0, 3);
     const similarExcursions = additionalSelectionRef.current.excursionList.splice(0, 3);
 
+    const isSimilarEventsEmpty = similarEvents.length == 0;
+    const isSimilarRestaurantsEmpty = similarRestaurants.length == 0;
+    const isSimilarExcursionsEmpty = similarExcursions.length == 0;
+
+    const isAllSimilarEmpty =
+      isSimilarEventsEmpty && isSimilarRestaurantsEmpty && isSimilarExcursionsEmpty;
+
+    if (isAllSimilarEmpty) {
+      setChatHistory([...chatHistory, 'Больше похожих вариантов нет']);
+      scrollWindowToBottom();
+      return;
+    }
+
     const newHistory: ChatHistoryItemType[] = [
       'Похожие варианты',
       {
