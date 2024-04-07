@@ -1,5 +1,7 @@
 import { Button } from 'antd';
 import { HeartIcon } from '../../shared/icons/HeartIcon';
+import { useState } from 'react';
+import { RedHeartIcon } from '../../shared/icons/RedHeartIcon';
 import './SaleCard.scss';
 
 type SaleCardProps = {
@@ -20,9 +22,22 @@ export const SaleCard = ({
   address,
   price,
   cardUrl,
-  onLikeClick,
+  // onLikeClick,
   id,
 }: SaleCardProps) => {
+  const [isLiked, setIsLiked] = useState(false);
+
+  const handleClick = () => {
+    console.log('CardLike :>> ', {
+      objectId: id,
+      title,
+      address,
+      price,
+      cardUrl,
+    });
+    setIsLiked(!isLiked);
+  };
+
   return (
     <div className='sale-card'>
       <div className='card-avatar'>
@@ -44,8 +59,8 @@ export const SaleCard = ({
           <Button type='text' className='sale-btn'>
             от {price}
           </Button>
-          <Button type='link' className='heart-btn' onClick={() => onLikeClick?.(id)}>
-            <span>В избранное</span> <HeartIcon />
+          <Button type='text' className='heart-btn' onClick={handleClick}>
+            <span>В избранное</span> {isLiked ? <RedHeartIcon /> : <HeartIcon />}
           </Button>
         </div>
       </div>

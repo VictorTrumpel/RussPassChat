@@ -104,7 +104,7 @@ export const ConcernFormViewModel = ({ children }: { children: ReactNode }) => {
   };
 
   const handleLikeActivity = async (activityId: string, actionType: ACTION_TYPE) => {
-    likeActivityController.like(activityId, actionType);
+    // likeActivityController.like(activityId, actionType);
   };
 
   const handleUnlikeActivity = async () => {};
