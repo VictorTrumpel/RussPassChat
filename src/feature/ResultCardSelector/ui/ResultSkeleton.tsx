@@ -13,38 +13,13 @@ export const ResultSkeleton = () => {
   };
 
   return (
-    <div className='tour-space concern-form-space'>
-      <div className='scrollable-window'>
-        <PrevStepsInfo />
-
-        <h4 className='selection-result-header'>Подобрали самые интересные варианты!</h4>
-        <h5>{interestPromt}</h5>
-
-        <div className='all-card-list'>
-          <h4 className='list-title'>События</h4>
-          <div className='list'>
-            <SaleCardSkeleton />
-            <SaleCardSkeleton />
-            <SaleCardSkeleton />
-          </div>
-        </div>
+    <div className='all-card-list'>
+      <h4 className='list-title'>События</h4>
+      <div className='list'>
+        <SaleCardSkeleton />
+        <SaleCardSkeleton />
+        <SaleCardSkeleton />
       </div>
-
-      <div className='action-button-panel'>
-        <Button type='text'>Другие варианты</Button>
-        <Button type='text'>
-          Поделиться <ShareIcon />
-        </Button>
-      </div>
-
-      <Button onClick={handleClickBtnBack} className='back-to-start-btn' type='text'>
-        Вернуться к началу
-      </Button>
-
-      <NextSubmitInput
-        inputProps={{ placeholder: 'Или введите свой вариант', disabled: true }}
-        buttonProps={{ disabled: true }}
-      />
     </div>
   );
 };

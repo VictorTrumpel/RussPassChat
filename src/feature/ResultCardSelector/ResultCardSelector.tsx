@@ -1,124 +1,139 @@
-import { SaleCard } from '../../entities/SaleCard/SaleCard';
-import { Button } from 'antd';
-import { useState, useEffect } from 'react';
+import { Button, InputProps } from 'antd';
+import { useState, useEffect, useRef, Fragment } from 'react';
 import { ShareIcon } from '../../shared/icons/ShareIcon';
 import { Event } from '../../network/models/Event';
 import { Restaurant } from '../../network/models/Restaurant';
 import { Excursion } from '../../network/models/Excursion';
 import { useConcernFormViewModel } from '../ConcernFormViewModel/ConcernFormViewModel';
-import { ACTION_TYPE } from '../../network/service/LikeActivityService';
 import { NextSubmitInput } from '../../shared/ui/NextSubmitInput/NextSubmitInput';
 import { PrevStepsInfo } from './PrevStepsInfo';
 import { ResultSkeleton } from './ui/ResultSkeleton';
+import { CardListSelection } from './ui/CardListSelection';
 import './ResultCardSelector.scss';
+
+type ChatHistoryItemType =
+  | {
+      eventList: Event[];
+      restaurantList: Restaurant[];
+      excursionList: Excursion[];
+    }
+  | string;
 
 export const ResultCardSelector = () => {
   const [isFetching, setIsFetch] = useState(false);
 
-  const [eventList, setEventList] = useState<Event[]>([]);
-  const [restaurantList, setRestaurantList] = useState<Restaurant[]>([]);
-  const [excursionList, setExcursionList] = useState<Excursion[]>([]);
+  const [chatHistory, setChatHistory] = useState<ChatHistoryItemType[]>([]);
+  const [extraPrompt, setExtraPrompt] = useState('');
 
-  const { handleSelectStep, fetchTheSelection, handleLikeActivity, interestPromt } =
-    useConcernFormViewModel();
+  const additionalSelectionRef = useRef<Exclude<ChatHistoryItemType, string>>({
+    eventList: [],
+    restaurantList: [],
+    excursionList: [],
+  });
 
-  const hasEvents = eventList.length > 0;
-  const hasRestaurants = restaurantList.length > 0;
-  const hasExcursions = excursionList.length > 0;
+  const scrollWindowRef = useRef<HTMLDivElement>(null);
+
+  const {
+    handleSelectStep,
+    fetchTheSelection,
+    handleLikeActivity,
+    interestPromt,
+    checkedConcernTags,
+    communityTags,
+    communityPromt,
+  } = useConcernFormViewModel();
 
   const handleClickBtnBack = () => {
     handleSelectStep('select-tag');
   };
 
-  const handleFetchResult = async () => {
+  const createPromptFromHistory = () => {
+    const concernTagsString = checkedConcernTags.join(' ');
+    const communityTagsString = communityTags.join(' ');
+
+    const basePrompt = `Интересы: ${concernTagsString.trim()} ${interestPromt.trim()} ${communityTagsString.trim()} ${communityPromt.trim()}`;
+
+    return basePrompt.trim();
+  };
+
+  const handleFetchResult = async (prompt: string = '') => {
     try {
       setIsFetch(true);
-      const { events, restaurant, excursion } = await fetchTheSelection();
-      setEventList(events);
-      setRestaurantList(restaurant);
-      setExcursionList(excursion);
+
+      const fullPrompt = `${createPromptFromHistory()} ${prompt}`.trim();
+
+      const newHistory = [...chatHistory, prompt];
+
+      setChatHistory([...newHistory]);
+
+      const { events, restaurant, excursion } = await fetchTheSelection(fullPrompt);
+
+      const newHistoryItem = {
+        eventList: events.slice(0, 3),
+        restaurantList: restaurant.slice(0, 3),
+        excursionList: excursion.slice(0, 3),
+      };
+
+      const newAdditionalItem = {
+        eventList: events.slice(3, events.length),
+        restaurantList: restaurant.slice(3, restaurant.length),
+        excursionList: excursion.slice(3, excursion.length),
+      };
+
+      additionalSelectionRef.current = newAdditionalItem;
+
+      setChatHistory([...newHistory, newHistoryItem]);
     } finally {
       setIsFetch(false);
     }
   };
 
-  const handleLikeBtnClick = (activityId: string, type: ACTION_TYPE) => {
-    handleLikeActivity(activityId, type);
+  const handleTypeExtraPrompt: InputProps['onChange'] = (event) => {
+    setExtraPrompt(event.target.value);
   };
 
-  const handleClickBtnOnExtraPrompt = () => {};
+  const handleClickBtnOnExtraPrompt = () => {
+    handleFetchResult(extraPrompt);
+    setExtraPrompt('');
+
+    setTimeout(() => {
+      const scrollWindow = scrollWindowRef.current;
+
+      if (!scrollWindow) return;
+
+      scrollWindow.scrollTo({
+        behavior: 'smooth',
+        top: scrollWindowRef.current.scrollHeight,
+      });
+    });
+  };
 
   useEffect(() => {
     handleFetchResult();
   }, []);
 
-  if (isFetching) return <ResultSkeleton />;
-
   return (
     <div className='tour-space concern-form-space'>
-      <div className='scrollable-window'>
+      <div ref={scrollWindowRef} className='scrollable-window'>
         <PrevStepsInfo />
 
         <h4 className='selection-result-header'>Подобрали самые интересные варианты!</h4>
 
         <h5>{interestPromt}</h5>
 
-        <div className='all-card-list'>
-          {hasEvents && <h4 className='list-title'>События</h4>}
-          <div className='list'>
-            {eventList
-              .slice(0, 3)
-              .map(({ objectId, title, imageUrl, address, price, popularity, cardUrl }) => (
-                <SaleCard
-                  key={objectId}
-                  id={objectId}
-                  imgUrl={imageUrl}
-                  title={title}
-                  address={address}
-                  price={`${price}`}
-                  popularity={popularity}
-                  cardUrl={cardUrl}
-                  onLikeClick={(id) => handleLikeBtnClick(id, 'EVENT')}
-                />
-              ))}
-          </div>
-
-          {hasRestaurants && <h4 className='list-title'>Рестораны</h4>}
-          <div>
-            {restaurantList
-              .slice(0, 3)
-              .map(({ objectId, title, imageUrl, address, price, popularity, cardUrl }) => (
-                <SaleCard
-                  key={objectId}
-                  id={objectId}
-                  imgUrl={imageUrl}
-                  title={title}
-                  address={address}
-                  price={`${price}`}
-                  popularity={popularity}
-                  cardUrl={cardUrl}
-                />
-              ))}
-          </div>
-
-          {hasExcursions && <h4 className='list-title'>Экскурссии</h4>}
-          <div>
-            {excursionList
-              .slice(0, 3)
-              .map(({ objectId, title, imageUrl, price, popularity, destination, cardUrl }) => (
-                <SaleCard
-                  key={objectId}
-                  id={objectId}
-                  imgUrl={imageUrl}
-                  title={title}
-                  address={destination}
-                  price={`${price}`}
-                  popularity={popularity}
-                  cardUrl={cardUrl}
-                />
-              ))}
-          </div>
-        </div>
+        {chatHistory.map((historyItem, idx) => {
+          if (!historyItem) return <Fragment key={idx} />;
+          if (historyItem instanceof Object)
+            return <CardListSelection key={idx} {...historyItem} />;
+          return (
+            <Fragment key={idx}>
+              <div className='divider' />
+              <h4 className='extra-prompt-text'>{historyItem}</h4>
+              <div className='divider' />
+            </Fragment>
+          );
+        })}
+        {isFetching && <ResultSkeleton />}
       </div>
 
       <div className='action-button-panel'>
@@ -129,8 +144,13 @@ export const ResultCardSelector = () => {
       </div>
 
       <NextSubmitInput
-        inputProps={{ placeholder: 'Или введите свой вариант' }}
+        inputProps={{
+          placeholder: 'Или введите свой вариант',
+          value: extraPrompt,
+          onChange: handleTypeExtraPrompt,
+        }}
         buttonProps={{
+          disabled: !extraPrompt,
           onClick: handleClickBtnOnExtraPrompt,
         }}
       />

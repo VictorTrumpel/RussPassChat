@@ -25,7 +25,7 @@ type ConcernViewModelType = {
   handleChangeDatePromt(text: string): void;
   handleSelectCommunityTag(text: string): void;
   handleUnselectCommunityTag(text: string): void;
-  fetchTheSelection(): ReturnType<AskLingvoController['askModel']>;
+  fetchTheSelection(prompt: string): ReturnType<AskLingvoController['askModel']>;
   handleChangeCommunityPromt(text: string): void;
 
   handleLikeActivity(activityId: string, actionType: ACTION_TYPE): Promise<void>;
@@ -99,13 +99,8 @@ export const ConcernFormViewModel = ({ children }: { children: ReactNode }) => {
     dispatch(setCommunityPromt(text));
   };
 
-  const fetchTheSelection = async () => {
-    const concernTagsString = checkedConcernTags.join(' ');
-    const communityTagsString = communityTags.join(' ');
-
-    const promt = `${concernTagsString} ${interestPromt} ${communityTagsString} ${communityPromt}`;
-
-    return await askLingvoController.askModel(promt);
+  const fetchTheSelection = async (prompt: string) => {
+    return await askLingvoController.askModel(prompt);
   };
 
   const handleLikeActivity = async (activityId: string, actionType: ACTION_TYPE) => {
