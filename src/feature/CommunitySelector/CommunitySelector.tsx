@@ -59,9 +59,7 @@ export const CommunitySelector = () => {
 
       <div className='divider' />
 
-      <h5 className='when-ask' onClick={handleGaBackToTags}>
-        Когда?
-      </h5>
+      <h5 className='when-ask'>Когда?</h5>
 
       <h4 className='date-info'>
         {date}

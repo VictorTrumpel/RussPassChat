@@ -50,11 +50,40 @@
   }
 
   .all-card-list {
-    height: 450px;
-    overflow-y: auto;
+    // height: 450px;
+    // overflow-y: auto;
   }
 
   .all-card-list .list-title {
     margin-top: 12px;
+  }
+
+  .scrollable-window {
+    max-height: 700px;
+    overflow-y: auto;
+  }
+
+  .prev-info-header {
+    margin-top: 12px;
+    display: flex;
+    justify-content: space-between;
+
+    h5 {
+      margin: 0;
+    }
+  }
+
+  .divider {
+    margin-top: 20px;
+  }
+
+  .prev-info-tag-container {
+    .tag-space span {
+      margin-top: 4px;
+    }
+  }
+
+  .selection-result-header {
+    margin-top: 20px;
   }
 }
