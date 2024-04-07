@@ -10,6 +10,7 @@ export const App = () => {
 
   return (
     <>
+      {/* <iframe className='russpass-iframe' src='https://russpass.ru/'></iframe> */}
       <Popover
         open={open}
         trigger='click'

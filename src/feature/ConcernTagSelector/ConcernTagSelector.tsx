@@ -17,6 +17,8 @@ export const ConcernTagSelector = () => {
     handleChangeInterestPromt,
   } = useConcernFormViewModel();
 
+  const isNextButtonDisabled = checkedConcernTags.length == 0 && !interestPromt;
+
   const handleClickTag = (tag: string) => {
     const hasAlreadyChecked = checkedConcernTags.includes(tag);
 
@@ -49,7 +51,7 @@ export const ConcernTagSelector = () => {
           value: interestPromt,
           onChange: handleTypeText,
         }}
-        buttonProps={{ disabled: checkedConcernTags.length == 0, onClick: handleSubmitTags }}
+        buttonProps={{ disabled: isNextButtonDisabled, onClick: handleSubmitTags }}
       />
     </div>
   );

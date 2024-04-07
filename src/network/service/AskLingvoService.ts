@@ -18,7 +18,7 @@ export class AskLingvoService {
 
     const network = new Network<
       { prompt: string },
-      { events: Event[]; restaurants: Restaurant[]; excursions: Excursion[] }
+      { events: Event[]; restaurant: Restaurant[]; excursion: Excursion[] }
     >();
 
     network.url = createFinishingUrl;

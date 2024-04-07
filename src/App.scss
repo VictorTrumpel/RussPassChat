@@ -3,10 +3,16 @@
 }
 
 #root {
-  max-width: 1280px;
+  width: 100%;
+  height: 100vh;
   margin: 0 auto;
-  padding: 2rem;
   text-align: center;
+}
+
+.russpass-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
 }
 
 .card {
@@ -40,7 +46,5 @@ h6 {
   margin: 0;
 }
 
-
 .chat-float-btn {
-  
 }

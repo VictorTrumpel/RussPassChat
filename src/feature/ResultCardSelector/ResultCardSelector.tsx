@@ -29,10 +29,10 @@ export const ResultCardSelector = () => {
   const handleFetchResult = async () => {
     try {
       setIsFetch(true);
-      const { events, restaurants, excursions } = await fetchTheSelection();
+      const { events, restaurant, excursion } = await fetchTheSelection();
       setEventList(events);
-      setRestaurantList(restaurants);
-      setExcursionList(excursions);
+      setRestaurantList(restaurant);
+      setExcursionList(excursion);
     } finally {
       setIsFetch(false);
     }
